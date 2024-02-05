@@ -1215,7 +1215,7 @@ class Hqgis:
             timestamp = QDateTime.fromString(time2, "yyyyMMdd-hh:mm:ss")
         else:
             timestamp = None
-            url += "&departureTime=any"
+            #url += "&departureTime=any"
         print(url)
         r = requests.get(url)
         print(url)
@@ -1369,7 +1369,7 @@ class Hqgis:
                 timestamp = QDateTime.fromString(time2, "yyyyMMdd-hh:mm:ss")
             else:
                 timestamp = None
-                url += "&departureTime=any"
+                #url += "&departureTime=any"
             print(url)
             r = requests.get(url)
             i += 1
