@@ -320,7 +320,9 @@ class isochroneList(QgsProcessingAlgorithm):
             print(sink, type(sink))
             print(self.OUTPUT, type(self.OUTPUT))
             ApiUrl = (
-                "https://isoline.router.hereapi.com/v8/isolines?origin="
+                "https://isoline.router.hereapi.com/v8/isolines?"
+                + "destination"
+                + "="
                 + coordinates
                 + "&departureTime="
                 + departureTime
