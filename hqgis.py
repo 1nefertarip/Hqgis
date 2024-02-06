@@ -1068,9 +1068,9 @@ class Hqgis:
             return
         originFeatures = originLayer.getFeatures()
         layerCRS = originLayer.crs()
-        if layerCRS != QgsCoordinateReferenceSystem(4326):
+        if layerCRS != QgsCoordinateReferenceSystem("EPSG:" + str(4326)):
             sourceCrs = layerCRS
-            destCrs = QgsCoordinateReferenceSystem(4326)
+            destCrs = QgsCoordinateReferenceSystem("EPSG:" + str(4326))
             tr = QgsCoordinateTransform(
                 sourceCrs, destCrs, QgsProject.instance())
         progressMessageBar = iface.messageBar().createMessage(
@@ -1082,7 +1082,7 @@ class Hqgis:
         iface.messageBar().pushWidget(progressMessageBar, level=0)
         i = 0
         for originFeature in originFeatures:
-            if layerCRS != QgsCoordinateReferenceSystem(4326):
+            if layerCRS != QgsCoordinateReferenceSystem("EPSG:" + str(4326)):
                 # we reproject:
                 geom = originFeature.geometry()
                 newGeom = tr.transform(geom.asPoint())
@@ -1213,9 +1213,9 @@ class Hqgis:
                 self.dlg.dateTimeEdit_2.dateTime().toString("yyyy-MM-dd'T'hh:mm:ss'Z'")
             time2 = self.dlg.dateTimeEdit_2.dateTime().toString("yyyyMMdd-hh:mm:ss")
             timestamp = QDateTime.fromString(time2, "yyyyMMdd-hh:mm:ss")
-        else:
-            timestamp = None
-            #url += "&departureTime=any"
+        # else:
+            # timestamp = None
+            # url += "&departureTime=any"
         print(url)
         r = requests.get(url)
         print(url)
@@ -1307,9 +1307,9 @@ class Hqgis:
             return
         originFeatures = originLayer.getFeatures()
         layerCRS = originLayer.crs()
-        if layerCRS != QgsCoordinateReferenceSystem(4326):
+        if layerCRS != QgsCoordinateReferenceSystem("EPSG:" + str(4326)):
             sourceCrs = layerCRS
-            destCrs = QgsCoordinateReferenceSystem(4326)
+            destCrs = QgsCoordinateReferenceSystem("EPSG:" + str(4326))
             tr = QgsCoordinateTransform(
                 sourceCrs, destCrs, QgsProject.instance())
         progressMessageBar = iface.messageBar().createMessage(
@@ -1321,7 +1321,7 @@ class Hqgis:
         iface.messageBar().pushWidget(progressMessageBar, level=0)
         i = 0
         for originFeature in originFeatures:
-            if layerCRS != QgsCoordinateReferenceSystem(4326):
+            if layerCRS != QgsCoordinateReferenceSystem("EPSG:" + str(4326)):
                 # we reproject:
                 geom = originFeature.geometry()
                 newGeom = tr.transform(geom.asPoint())
