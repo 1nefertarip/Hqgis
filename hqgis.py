@@ -1068,9 +1068,9 @@ class Hqgis:
             return
         originFeatures = originLayer.getFeatures()
         layerCRS = originLayer.crs()
-        if layerCRS != QgsCoordinateReferenceSystem("EPSG:" + str(4326)):
+        if layerCRS != QgsCoordinateReferenceSystem(4326):
             sourceCrs = layerCRS
-            destCrs = QgsCoordinateReferenceSystem("EPSG:" + str(4326))
+            destCrs = QgsCoordinateReferenceSystem(4326)
             tr = QgsCoordinateTransform(
                 sourceCrs, destCrs, QgsProject.instance())
         progressMessageBar = iface.messageBar().createMessage(
@@ -1082,7 +1082,7 @@ class Hqgis:
         iface.messageBar().pushWidget(progressMessageBar, level=0)
         i = 0
         for originFeature in originFeatures:
-            if layerCRS != QgsCoordinateReferenceSystem("EPSG:" + str(4326)):
+            if layerCRS != QgsCoordinateReferenceSystem(4326):
                 # we reproject:
                 geom = originFeature.geometry()
                 newGeom = tr.transform(geom.asPoint())
@@ -1307,9 +1307,9 @@ class Hqgis:
             return
         originFeatures = originLayer.getFeatures()
         layerCRS = originLayer.crs()
-        if layerCRS != QgsCoordinateReferenceSystem("EPSG:" + str(4326)):
+        if layerCRS != QgsCoordinateReferenceSystem(4326):
             sourceCrs = layerCRS
-            destCrs = QgsCoordinateReferenceSystem("EPSG:" + str(4326))
+            destCrs = QgsCoordinateReferenceSystem(4326)
             tr = QgsCoordinateTransform(
                 sourceCrs, destCrs, QgsProject.instance())
         progressMessageBar = iface.messageBar().createMessage(
@@ -1321,7 +1321,7 @@ class Hqgis:
         iface.messageBar().pushWidget(progressMessageBar, level=0)
         i = 0
         for originFeature in originFeatures:
-            if layerCRS != QgsCoordinateReferenceSystem("EPSG:" + str(4326)):
+            if layerCRS != QgsCoordinateReferenceSystem(4326):
                 # we reproject:
                 geom = originFeature.geometry()
                 newGeom = tr.transform(geom.asPoint())
@@ -1331,7 +1331,8 @@ class Hqgis:
                 x = originFeature.geometry().asPoint().x()
                 y = originFeature.geometry().asPoint().y()
             coordinates = str(y) + "," + str(x)
-
+            progressMessageBar = iface.messageBar().createMessage(
+                "searching for" + coordinates + " ...")
             type = self.dlg.Type_2.currentText()
             mode = self.dlg.TransportMode_2.currentText()
             traffic = self.dlg.trafficMode_2.currentText()
