@@ -75,6 +75,7 @@ class isochroneList(QgsProcessingAlgorithm):
     METRIC = "METRIC"
     DISTANCES = "DISTANCE"
     DEPARTURETIME = "DEPARTURETIME"
+    ORIGIN = "ORIGIN"
 
     def tr(self, string):
         """
@@ -182,6 +183,21 @@ class isochroneList(QgsProcessingAlgorithm):
                 allowMultiple=False,
             )
         )
+        self.origins = [
+            "start",
+            "destination"        
+            ]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.ORIGIN,
+                self.tr("origin/destination"),
+                options=self.origins,
+                defaultValue="start",
+                optional=False,
+                allowMultiple=False,
+            )
+        )
+
         self.modes = ["fast", "short"]
         self.addParameter(
             QgsProcessingParameterEnum(
@@ -244,6 +260,7 @@ class isochroneList(QgsProcessingAlgorithm):
             or source.wkbType() == 3004
         ):
             raise QgsProcessingException("MultiPoint layer is not supported!")
+        origin = self.keys[self.parameterAsEnum(parameters, self.ORIGIN, context)]
         transportMode = self.keys[self.parameterAsEnum(parameters, self.KEYS, context)]
         mode = self.modes[self.parameterAsEnum(parameters, self.MODES, context)]
         slots = self.parameterAsString(parameters, self.DISTANCES, context)
@@ -319,10 +336,17 @@ class isochroneList(QgsProcessingAlgorithm):
             time.sleep(1)
             print(sink, type(sink))
             print(self.OUTPUT, type(self.OUTPUT))
+            if origin == "start":
+                origin_key = "origin"
+                time_key = "destination"
+            else:
+                origin_key = "destination"
+                time_key = "origin"
             ApiUrl = (
-                "https://isoline.router.hereapi.com/v8/isolines?origin="
+                "https://isoline.router.hereapi.com/v8/isolines?"
+                + origin_key + "="
                 + coordinates
-                + "&departureTime="
+                + "&" + time_key + "Time="
                 + departureTime
                 + "&range[type]="
                 + metric
