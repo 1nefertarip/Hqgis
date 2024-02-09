@@ -76,6 +76,7 @@ class isochroneList(QgsProcessingAlgorithm):
     DISTANCES = "DISTANCE"
     DEPARTURETIME = "DEPARTURETIME"
     ORIGIN = "ORIGIN"
+    TRAFFIC = "TRAFFIC"
 
     def tr(self, string):
         """
@@ -224,16 +225,28 @@ class isochroneList(QgsProcessingAlgorithm):
             QgsProcessingParameterString(
                 self.DISTANCES,
                 self.tr("Distance(s)"),
-                "300,600,900",
+                "60,120,180",
                 optional=False,
             )
         )
+        self.traffics = ["enabled", "disabled"]
+        self.addParameter(
+            QgsProcessingParameterEnum(
+                self.TRAFFIC,
+                self.tr("traffic"),
+                options=self.traffics,
+                defaultValue="disabled",
+                optional=False,
+                allowMultiple=False,
+            )
+        )
+
         self.addParameter(
             QgsProcessingParameterString(
                 self.DEPARTURETIME,
                 self.tr("Local Departure Time"),  # 2019-06-24T01:23:45
                 datetime.now().strftime("%Y-%m-%dT%H:%M:%S"),
-                optional=False,
+                optional=True,
             )
         )
 
@@ -266,6 +279,7 @@ class isochroneList(QgsProcessingAlgorithm):
         slots = self.parameterAsString(parameters, self.DISTANCES, context)
         metric = self.metric[self.parameterAsEnum(parameters, self.METRIC, context)]
         departureTime = self.parameterAsString(parameters, self.DEPARTURETIME, context)
+        traffic = self.parameterAsString(parameters, self.TRAFFIC, context)
         print(type(transportMode), type(metric), type(slots), type(mode), type(time))
         # feedback.pushInfo(addressField)
 
@@ -346,8 +360,6 @@ class isochroneList(QgsProcessingAlgorithm):
                 "https://isoline.router.hereapi.com/v8/isolines?"
                 + origin_key + "="
                 + coordinates
-                + "&" + time_key + "Time="
-                + departureTime
                 + "&range[type]="
                 + metric
                 + "&range[values]="
@@ -359,7 +371,11 @@ class isochroneList(QgsProcessingAlgorithm):
                 + "&apiKey="
                 + creds["id"]
             )
-
+            if traffic == "enabled":
+                ApiUrl += "&" + time_key + "Time=" + departureTime
+            else:
+                departureTime = None
+                
             feedback.pushInfo("calling Url {}".format(ApiUrl))
             r = requests.get(ApiUrl, headers=header)
             print(json.loads(r.text))
