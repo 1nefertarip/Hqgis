@@ -298,7 +298,7 @@ class isochroneList(QgsProcessingAlgorithm):
         fields.append(QgsField("origin_id", QVariant.Int))
         fields.append(QgsField("url", QVariant.String)),
         fields.append(QgsField("type", QVariant.String)),
-        fields.append(QgsField("distance", QVariant.Double))
+        fields.append(QgsField("range", QVariant.Double))
         (sink, dest_id) = self.parameterAsSink(
             parameters,
             self.OUTPUT,
